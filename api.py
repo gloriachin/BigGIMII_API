@@ -4,6 +4,7 @@ import sys
 sys.path.append('./src/')
 import Pathway_Gene
 import Drugbank
+import Synthtic_lethylity
 
 app = Flask(__name__)
 api = Api(app)
@@ -60,6 +61,32 @@ class list_FDA_Drugs(Resource):
         result = Drugbank.list_approved_drugs()
         result = list(set(result['Drug']))
         return(result)
+
+
+## Section 3: Parse gene mutation dependent gene effects
+
+def abort_if_mut_doesnt_exist(mut_gene):
+    if len(Synthtic_lethylity.select_SL_by_mutation([mut_gene]))==0:
+        abort(404, message="gene {} is not in the driver gene list".format(mut_gene))
+
+def abort_if_ko_doesnt_exist(ko_gene):
+    if len(Synthtic_lethylity.select_SL_by_ko([ko_gene]))==0:
+        abort(404, message="gene {} is not in the knockout gene list".format(ko_gene))
+
+
+class Query_SL_by_mutation(Resource):
+    def get(self, mut_gene):
+        abort_if_mut_doesnt_exist(mut_gene)
+        result = Synthtic_lethylity.select_SL_by_mutation([mut_gene])
+        return(result)
+
+class Query_SL_by_ko(Resource):
+    def get(self, ko_gene):
+        abort_if_mut_doesnt_exist(ko_gene)
+        result = Synthtic_lethylity.select_SL_by_ko([ko_gene])
+        return(result)
+
+
 ## Actually setup the Api resource routing here
 ##
 
@@ -70,6 +97,8 @@ api.add_resource(list_FDA_Drugs, '/list_FDA_Drugs/')
 api.add_resource(Query_Targets_by_drug, '/Query_Targets_by_drug/<drug_name>/')
 api.add_resource(Query_drugs_by_target, '/Query_drugs_by_target/<Target>/')
 
+api.add_resource(Query_SL_by_mutation, '/Query_SL_by_mut/<mut_gene>/')
+api.add_resource(Query_SL_by_ko, '/Query_SL_by_ko/<ko_gene>/')
 
 if __name__ == '__main__':
     app.run(debug=True)
