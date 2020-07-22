@@ -1,4 +1,4 @@
-#### Before geting started, please install all packages from the requirementlist
+#### Before geting started, please install all packages from the requirement.txt
 
 ### In the home directory, run the following command to initate the server
 python api.py
