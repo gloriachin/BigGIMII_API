@@ -1,16 +1,7 @@
 import pandas as pd
-#import numpy as np
-#from statsmodels.formula.api import ols
-#import math
-#import matplotlib.pyplot as plt
-#import seaborn
-#import statsmodels.stats.multitest as multi
-#from scipy import stats
 from google.cloud import bigquery
 import json
-#print("Importing libraries successful!")
 
-#Pathway_userDefine = ['hsa04010'] 
 
 client = bigquery.Client.from_service_account_json('./cre/c.json')# This is the credential file which allows users to get access to BigQuery tables. User's private key that is associated to the user's service account for security purposes.
 
@@ -71,5 +62,3 @@ def ListPathways(KEGG = True):
             dic_pathway_name[ids] = (result.loc[result['Pathway_id'] == ids]['Pathway_Name'].values[0])
 
     return(dic_pathway_name)
-
-print(ListPathways(KEGG = True))
