@@ -1,4 +1,7 @@
 from flask import Flask
+from flask import request
+import json
+
 from flask_restful import reqparse, abort, Api, Resource
 import sys
 sys.path.append('./src/')
@@ -21,7 +24,6 @@ def abort_if_pathway_doesnt_exist(pathway_id):
 class PathwayLists(Resource):
     def get(self,):
         result = Pathway_Gene.ListPathways(KEGG=True)
-        
         return(result)
 
 
@@ -91,8 +93,10 @@ class Query_co_exp_inGroup(Resource):
     def get(self, gene_list):
         result = AML_KG.Fun_select_co_exp_inGroup(gene_list)
         return(result)
+    #def post(self):
+
 ## Actually setup the Api resource routing here
-##
+
 
 api.add_resource(PathwayLists, '/PathwayLists/')
 api.add_resource(Pathway, '/Pathway/<Pathway_id>/')
@@ -104,7 +108,14 @@ api.add_resource(Query_drugs_by_target, '/Query_drugs_by_target/<Target>/')
 api.add_resource(Query_SL_by_mutation, '/Query_SL_by_mut/<mut_gene>/')
 api.add_resource(Query_SL_by_ko, '/Query_SL_by_ko/<ko_gene>/')
 
-api.add_resource(Query_co_exp_inGroup,'/Query_co_exp_inGroup/<gene_list>')
+
+@app.route("/Query_co_exp_inGroup", methods = ['POST'])
+def Query_co_exp_inGroup_api():
+    json_content = request.get_json()
+    gene_list = json_content['genes']
+    result = AML_KG.Fun_select_co_exp_inGroup(gene_list)
+    return(result)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

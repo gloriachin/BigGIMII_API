@@ -31,6 +31,7 @@ def Fun_dic_ensemble_symbol():
     
 def Fun_read_co_exp():
     data = pd.read_csv('./Datasets/AML/co_exp/co_expression_beatAML_RPMK.csv')
+    #data = pd.read_csv('./Datasets/AML/co_exp/test.csv')
     return(data)
 
 def Fun_Double_node_check(graph, node_list):
