@@ -50,3 +50,9 @@ curl http://localhost:5000/list_FDA_Drugs/
 ##### Section 5: get the gene associated drug
 
 ##### Section 6: get the gene mutation associateed differential gene expression
+
+
+POST methods:
+Examples
+Query how genes show co-expression with another from a gene list
+curl -X POST -H 'Content-Type: application/json' --data '{"genes":["TP53","FLT3","NPM1","KRAS","NRAS"]}' http://localhost:5000/Query_co_exp_inGroup
