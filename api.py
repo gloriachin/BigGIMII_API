@@ -5,11 +5,12 @@ sys.path.append('./src/')
 import Pathway_Gene
 import Drugbank
 import Synthtic_lethylity
+import AML_KG
 
 app = Flask(__name__)
 api = Api(app)
 
-
+##https://github.com/NCATS-Tangerine/kgx/blob/master/data-preparation.md #Formating
 parser = reqparse.RequestParser()
 
 ##Section 1: Parse KEGG pathways
@@ -86,7 +87,10 @@ class Query_SL_by_ko(Resource):
         result = Synthtic_lethylity.select_SL_by_ko([ko_gene])
         return(result)
 
-
+class Query_co_exp_inGroup(Resource):
+    def get(self, gene_list):
+        result = AML_KG.Fun_select_co_exp_inGroup(gene_list)
+        return(result)
 ## Actually setup the Api resource routing here
 ##
 
@@ -99,6 +103,8 @@ api.add_resource(Query_drugs_by_target, '/Query_drugs_by_target/<Target>/')
 
 api.add_resource(Query_SL_by_mutation, '/Query_SL_by_mut/<mut_gene>/')
 api.add_resource(Query_SL_by_ko, '/Query_SL_by_ko/<ko_gene>/')
+
+api.add_resource(Query_co_exp_inGroup,'/Query_co_exp_inGroup/<gene_list>')
 
 if __name__ == '__main__':
     app.run(debug=True)

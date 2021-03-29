@@ -1,5 +1,5 @@
 import requests
-
+import sys
 ## 1: List all the pathway ids and names.
 #r1 = requests.get('http://localhost:5000/PathwayLists/')
 #print((r1.json()))
@@ -20,7 +20,7 @@ import requests
 
 ## 5. Query the synthetic lethylity pairs according one gene mutation
 #curl http://localhost:5000/Query_SL_by_mut/<mut_gene>/
-r5 = requests.get('http://127.0.0.1:5000/Query_SL_by_mut/EGFR/')
+r5 = requests.get('http://127.0.0.1:5000/Query_SL_by_mut/'+ sys.argv[1]+'/')
 print(r5.json())
 
 
